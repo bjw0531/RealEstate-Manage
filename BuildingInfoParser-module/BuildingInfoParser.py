@@ -2,6 +2,7 @@
 from tkinter import *
 import re
 import PublicDataReader as pdr
+import pandas as pd
 
 serviceKey = "boUDsxTChVh4mecHhfF0r1%2B3w%2FIOzO4tnvgdHmhLWsUsaX2bx%2FKspfmPnJrP1%2B6z2cBqTewiS30Lf3ohEghk9g%3D%3D"
 bd = pdr.Building(serviceKey, debug=True)
@@ -56,8 +57,11 @@ def 호실면적(전유공용면적세션, 호실):
     실패시 False를 출력합니다.
     """
     df = 전유공용면적세션
+    df["호명칭"] = df["호명칭"].astype(str)
     df = df.loc[
-        (df["호명칭"] == str(호실)) & (df["층번호명"] != "각층") & (df["전유공용구분코드명"] == "전유")
+        ((df["호명칭"] == str(호실)) | (df["호명칭"] == str(호실) + "호"))
+        & (df["층번호명"] != "각층")
+        & (df["전유공용구분코드명"] == "전유")
     ]
     if len(df.index) == 1:
         result = df.iloc[0]["면적"]
@@ -72,8 +76,11 @@ def 호실용도(전유공용면적세션, 호실):
     실패시 False를 출력합니다.
     """
     df = 전유공용면적세션
+    df["호명칭"] = df["호명칭"].astype(str)
     df = df.loc[
-        (df["호명칭"] == str(호실)) & (df["층번호명"] != "각층") & (df["전유공용구분코드명"] == "전유")
+        ((df["호명칭"] == str(호실)) | (df["호명칭"] == str(호실) + "호"))
+        & (df["층번호명"] != "각층")
+        & (df["전유공용구분코드명"] == "전유")
     ]
     if len(df.index) == 1:
         result = df.iloc[0]["주용도코드명"]
@@ -133,6 +140,10 @@ def 총층수(표제부세션):
 if __name__ == "__main__":
 
     session = newsession()
-    session.표제부("44133", "10500", "0770", "0000")
-    a = 주차대수(session.표제부세션)
+    # session.표제부("44133", "10500", "0770", "0000")
+    session.전유공용면적("44133", "10400", "1420", "0000")
+    df1 = pd.read_csv("C:/Users/User/Downloads/통합 문서1.csv")
+    print(df1)
+    b = session.전유공용면적세션
+    a = 호실용도(df1, 201)
     print(a)
