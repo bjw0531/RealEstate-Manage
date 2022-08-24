@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 from tkinter import *
 import re
 import PublicDataReader as pdr
 import pandas as pd
+import decimal
 
 serviceKey = "boUDsxTChVh4mecHhfF0r1%2B3w%2FIOzO4tnvgdHmhLWsUsaX2bx%2FKspfmPnJrP1%2B6z2cBqTewiS30Lf3ohEghk9g%3D%3D"
 bd = pdr.Building(serviceKey, debug=True)
@@ -67,7 +67,35 @@ def 호실면적(전유공용면적세션, 호실):
         result = df.iloc[0]["면적"]
         return result
     else:
-        return False
+        return len(df.index)
+
+
+def 공급면적(전유공용면적세션, 호실):
+    """
+    공급면적을 출력합니다.\n
+    실패시 False를 출력합니다.
+    """
+    try:
+        df = 전유공용면적세션
+        df["호명칭"] = df["호명칭"].astype(str)
+        df["면적"] = df["면적"].astype(float)
+        df = df.loc[df["호명칭"] == str(호실)]
+
+        length = len(df.index)
+
+        arealist = list(map(str, df["면적"].values[range(length)].tolist()))
+
+        result = decimal.Decimal("0.0")
+
+        for i in arealist:
+            result += decimal.Decimal(i)
+
+        if result != None:
+            return result
+        else:
+            raise
+    except:
+        return result
 
 
 def 호실용도(전유공용면적세션, 호실):
@@ -137,28 +165,15 @@ def 총층수(표제부세션):
         return False
 
 
-def 승강기수(표제부세션):
-    """
-    총 승강기 수를 출력합니다.\n
-    실패시 False를 출력합니다.
-    """
-    df = 표제부세션
-    if len(df.index) == 1:
-        result = int(df.iloc[0]["비상용승강기수"]) + int(df.iloc[0]["승용승강기수"])
-        return result
-    else:
-        return False
-
-
 if __name__ == "__main__":
 
     session = newsession()
-    session.표제부("44133", "10400", "1420", "0000")
+    session.표제부("44133", "10500", "0770", "0000")
     session.전유공용면적("44133", "10400", "1420", "0000")
     df1 = pd.read_csv("C:/Users/User/Downloads/통합 문서1.csv")
     print(df1)
     b = session.전유공용면적세션
-    a = 호실용도(df1, 201)
     c = session.표제부세션
-    d = 승강기수(c)
+    print(b)
+    d = 공급면적(session.전유공용면적세션, 202)
     print(d)
