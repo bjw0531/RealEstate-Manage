@@ -52,6 +52,13 @@ def on_press(key):
         pass
 
 
+def doRandomElementClick():
+    driver.find_element(
+        By.XPATH,
+        "/html/body/table/tbody/tr/td[2]/table/tbody/tr[3]/td/form/table[4]/tbody/tr[7]/td[1]/div",
+    ).click()
+
+
 while True:
     try:
         with keyboard.Listener(on_press=on_press, on_release="") as listener:
@@ -67,10 +74,7 @@ while True:
     win32clipboard.EmptyClipboard()
     win32clipboard.CloseClipboard()
 
-    driver.find_element(
-        By.XPATH,
-        "/html/body/table/tbody/tr/td[2]/table/tbody/tr[3]/td/form/table[4]/tbody/tr[7]/td[1]/div",
-    ).click()
+    doRandomElementClick()
 
     areatext_splited = areatext.split()
 
@@ -252,9 +256,28 @@ while True:
 
     # 즉시 입주 가능 변경
     try:
-        driver.find_element(By.ID, "movein_day").clear()
-        driver.find_element(By.ID, "movein_day").send_keys("즉시입주가능")
-        print("즉시입주가능 입력")
+        moveinday = driver.find_element(By.ID, "movein_day")
+
+        moveinday.send_keys(Keys.CONTROL + "A")
+        moveinday.send_keys(Keys.CONTROL + "C")
+
+        doRandomElementClick()
+
+        win32clipboard.OpenClipboard()
+        try:
+            moveinday_value = win32clipboard.GetClipboardData()
+        except TypeError:
+            moveinday_value = None
+        win32clipboard.EmptyClipboard()
+        win32clipboard.CloseClipboard()
+
+        if moveinday_value == None:
+            moveinday.clear()
+            moveinday.send_keys("즉시입주가능")
+            print("즉시입주가능 입력")
+        else:
+            print("입주일자 입력되어있음")
+
     except:
         print("즉시입주가능 입력 \033[31m실패\033[0m")
 
@@ -271,9 +294,27 @@ while True:
 
     # 현재 층
     try:
-        driver.find_element(By.ID, "now_floor").clear()
-        driver.find_element(By.ID, "now_floor").send_keys(floor)
-        print("현재 층 입력(%s)" % floor)
+        now_floor = driver.find_element(By.ID, "now_floor")
+
+        now_floor.send_keys(Keys.CONTROL + "A")
+        now_floor.send_keys(Keys.CONTROL + "C")
+
+        doRandomElementClick()
+
+        win32clipboard.OpenClipboard()
+        try:
+            now_floor_value = win32clipboard.GetClipboardData()
+        except TypeError:
+            now_floor_value = None
+        win32clipboard.EmptyClipboard()
+        win32clipboard.CloseClipboard()
+
+        if now_floor_value == None:
+            now_floor.clear()
+            now_floor.send_keys(floor)
+            print("현재 층 입력(%s)" % floor)
+        else:
+            print("현재 층 입력되어있음")
     except:
         print("현재 층 입력 \033[31m실패\033[0m")
 
