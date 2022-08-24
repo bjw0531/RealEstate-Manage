@@ -134,6 +134,19 @@ def 층용도(층별개요세션, 층):
         return False
 
 
+def 승강기수(표제부세션):
+    """
+    총 승강기 수를 출력합니다.\n
+    실패시 False를 출력합니다.
+    """
+    df = 표제부세션
+    if len(df.index) == 1:
+        result = int(df.iloc[0]["비상용승강기수"]) + int(df.iloc[0]["승용승강기수"])
+        return result
+    else:
+        return False
+
+
 def 주차대수(표제부세션):
     """
     옥내,옥외,자주식,기계식 주차대수를 모두 더해 출력합니다.\n
