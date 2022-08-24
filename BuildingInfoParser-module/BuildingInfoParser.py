@@ -91,7 +91,7 @@ def 공급면적(전유공용면적세션, 호실):
             result += decimal.Decimal(i)
 
         if result != None:
-            return result
+            return float(result)
         else:
             raise
     except:
