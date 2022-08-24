@@ -2,6 +2,7 @@ from tkinter import *
 import re
 import PublicDataReader as pdr
 import pandas as pd
+import decimal
 
 serviceKey = "boUDsxTChVh4mecHhfF0r1%2B3w%2FIOzO4tnvgdHmhLWsUsaX2bx%2FKspfmPnJrP1%2B6z2cBqTewiS30Lf3ohEghk9g%3D%3D"
 bd = pdr.Building(serviceKey, debug=True)
@@ -80,7 +81,14 @@ def 공급면적(전유공용면적세션, 호실):
         df["면적"] = df["면적"].astype(float)
         df = df.loc[df["호명칭"] == str(호실)]
 
-        result = df
+        length = len(df.index)
+
+        arealist = list(map(str, df["면적"].values[range(length)].tolist()))
+
+        result = decimal.Decimal("0.0")
+
+        for i in arealist:
+            result += decimal.Decimal(i)
 
         if result != None:
             return result
