@@ -81,13 +81,9 @@ while True:
     ji = ji.zfill(4)
 
     # 동 체크박스 체크하고 호, 층 가져오기
-    is_dong = driver.find_element(
-        By.XPATH,
-        '//*[@id="content"]/div[4]/div/div/div[2]/section/div[1]/div[2]/label/input',
-    ).get_attribute("name")
-
-    if is_dong == "dong":
-        driver.find_element(By.NAME, "isNoinfoDong").click()
+    dong_checkbox = driver.find_element(By.NAME, "isNoinfoDong")
+    if dong_checkbox.get_property("checked") == False:
+        dong_checkbox.click()
 
     ho = driver.find_element(By.NAME, "ho").get_attribute("value")
     floor = ho[:-2]
@@ -164,14 +160,14 @@ while True:
         useaprday_selectbox = Select(
             driver.find_element(
                 By.XPATH,
-                '//*[@id="content"]/div[4]/div/div/div[4]/section/div[1]/div[1]/select',
+                "//h1[text()='건축물 승인']/../../section/div/div/select",
             )
         )
         useaprday_selectbox.select_by_index(1)
 
         useaprday_textbox = driver.find_element(
             By.XPATH,
-            '//*[@id="content"]/div[4]/div/div/div[4]/section/div[1]/div[1]/div/div/div/input',
+            "//h1[text()='건축물 승인']/../../section/div/div/div/div/div/input",
         )
 
         useaprday = 사용승인일(session.표제부세션)
@@ -220,7 +216,7 @@ while True:
         total_floor_selectbox = Select(
             driver.find_element(
                 By.XPATH,
-                '//*[@id="content"]/div[7]/div/div/div[2]/section/div/select[1]',
+                "//h1[text()='건물 층수']/../../section/div/select",
             )
         )
         total_floor_selectbox.select_by_index(int(total_floor))
@@ -228,7 +224,7 @@ while True:
         floor_selctbox = Select(
             driver.find_element(
                 By.XPATH,
-                '//*[@id="content"]/div[7]/div/div/div[2]/section/div/select[2]',
+                "//h1[text()='건물 층수']/../../section/div/select[2]",
             )
         )
         floor_selctbox.select_by_index(int(floor) + 2)
@@ -250,7 +246,7 @@ while True:
         boiler_selectbox = Select(
             driver.find_element(
                 by=By.XPATH,
-                value='//*[@id="content"]/div[7]/div/div/div[5]/section/select',
+                value="//h1[text()='난방 종류']/../../section/select",
             )
         )
         boiler_selectbox.select_by_index(2)
@@ -350,7 +346,7 @@ while True:
         select_method = Select(
             driver.find_element(
                 by=By.XPATH,
-                value='//*[@id="content"]/div[10]/div/div/div[1]/section/div[2]/select',
+                value="//h1[text()='중개 의뢰 방법']/../../section/div[2]/select",
             )
         )
         select_method.select_by_index(1)
@@ -362,7 +358,7 @@ while True:
     try:
         driver.find_element(
             by=By.XPATH,
-            value='//*[@id="content"]/div[10]/div/div/div[2]/section/div/div/label[1]',
+            value="//*[text()='미동의']",
         ).click()
         print("마이홈 추가노출 선택")
     except:
