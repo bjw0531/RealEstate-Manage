@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from pynput import keyboard
-import win32clipboard
 from selenium.webdriver.support.ui import Select
-import re
 import PublicDataReader as pdr
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -10,7 +8,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import os
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
 from data import *
@@ -194,10 +191,12 @@ while True:
 
         useaprday = 사용승인일(session.표제부세션)
 
-        useaprday_textbox.clear()
-        useaprday_textbox.send_keys(useaprday)
+        useaprday_splited = useaprday[0:4] + "." + useaprday[4:6] + "." + useaprday[6:8]
 
-        print("사용승인일 입력(%s)" % useaprday)
+        useaprday_textbox.clear()
+        useaprday_textbox.send_keys(useaprday_splited)
+
+        print("사용승인일 입력(%s)" % useaprday_splited)
     except:
         print("사용승인일 입력 \033[31m실패\033[0m")
 
