@@ -53,6 +53,7 @@ def check_background_image(xpath):
 
 while True:
     try:
+        print("|키 입력 대기 중|")
         with keyboard.Listener(on_press=on_press, on_release="") as listener:
             listener.join()
     except:

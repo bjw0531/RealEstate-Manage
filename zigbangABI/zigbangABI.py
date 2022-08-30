@@ -48,6 +48,7 @@ def CheckAndClickCB(word):
 
 while True:
     try:
+        print("|키 입력 대기 중|")
         with keyboard.Listener(on_press=on_press, on_release="") as listener:
             listener.join()
     except:
@@ -102,7 +103,7 @@ while True:
     )
 
     # 세션 요청
-    print("세션 만드는중..")
+    print("세션 만드는중..  ")
     print(
         f"""
 - - - - - -
