@@ -95,6 +95,12 @@ while True:
     # '동구분이 없음' 체크
     CheckAndClickCB('//input[@name="noDong"]')
 
+    # 빌라인지 체크
+    is_villa = (
+        driver.find_element(By.XPATH, "//*[@class='active']").get_property("innerText")
+        == "빌라"
+    )
+
     # 세션 요청
     print("세션 만드는중..")
     print(
@@ -102,7 +108,8 @@ while True:
 - - - - - -
 동 = {dong}  주소 = {bunji}  
 번 = {bun}  지 = {ji}
-층 = {floor}  호 = {ho}  
+층 = {floor}  호 = {ho}
+빌라 = {is_villa}
 - - - - - -
         """
     )
@@ -173,6 +180,20 @@ while True:
             print("전용면적 입력(%s)" % own_area)
         else:
             raise
+
+        if is_villa:
+            try:
+                supply_area = 공급면적(session.전유공용면적세션, ho)
+                if supply_area != False:
+                    driver.find_element(By.NAME, "size_contract_m2").clear()
+                    driver.find_element(By.NAME, "size_contract_m2").send_keys(
+                        supply_area
+                    )
+                    print("공급면적 입력(%s)" % supply_area)
+                else:
+                    raise
+            except:
+                print("공급면적 입력 \033[31m실패\033[0m")
     except:
         print("전용면적 입력 \033[31m실패\033[0m")
 
@@ -186,7 +207,6 @@ while True:
 
     # 사용승인일
     try:
-
         useaprday_textbox = driver.find_element(By.NAME, "approve_date")
 
         useaprday = 사용승인일(session.표제부세션)
@@ -249,22 +269,25 @@ while True:
 
     # 옵션 (에어컨,냉장고,세탁기,가스레인지,옷장,신발장,싱크대)
     try:
-        options_list = ["에어컨", "냉장고", "세탁기", "가스레인지", "옷장", "신발장", "싱크대"]
-        options_dict = {
-            "에어컨": "01",
-            "냉장고": "02",
-            "세탁기": "03",
-            "가스레인지": "04",
-            "옷장": "10",
-            "신발장": "11",
-            "싱크대": "12",
-        }
-        options_value = driver.find_element(By.NAME, "options").get_property("value")
+        if not is_villa:
+            options_list = ["에어컨", "냉장고", "세탁기", "가스레인지", "옷장", "신발장", "싱크대"]
+            options_dict = {
+                "에어컨": "01",
+                "냉장고": "02",
+                "세탁기": "03",
+                "가스레인지": "04",
+                "옷장": "10",
+                "신발장": "11",
+                "싱크대": "12",
+            }
+            options_value = driver.find_element(By.NAME, "options").get_property(
+                "value"
+            )
 
-        for i in options_list:
-            if not options_dict[i] in options_value:
-                driver.find_element(By.XPATH, '//span[text() = "%s"]' % i).click()
-                print("%s 체크" % i)
+            for i in options_list:
+                if not options_dict[i] in options_value:
+                    driver.find_element(By.XPATH, '//span[text() = "%s"]' % i).click()
+                    print("%s 체크" % i)
 
     except:
         print("추가옵션 체크 \033[31m실패\033[37m")
