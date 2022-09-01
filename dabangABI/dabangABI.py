@@ -71,7 +71,7 @@ while True:
     bunji = address_split[4]
 
     if "-" in bunji:
-        bunji_split = bunji.split()
+        bunji_split = bunji.split("-")
         bun = bunji_split[0]
         ji = bunji_split[1]
     else:
