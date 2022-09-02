@@ -317,7 +317,7 @@ while True:
 # 방수/욕실수 : 1개/1개
 """ % (
             str(parking),
-            str(useaprday),
+            str(useaprday_splited),
         )
 
         driver.find_element(By.NAME, "description").clear()
