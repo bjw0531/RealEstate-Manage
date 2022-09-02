@@ -129,6 +129,7 @@ def 층용도(층별개요세션, 층):
         result = re.sub("\(.*?\)", "", result)
         result = re.sub("\(", "", result)
         result = re.sub("\)", "", result)
+        result = re.sub(" ", "", result)
         return result
     else:
         return False
