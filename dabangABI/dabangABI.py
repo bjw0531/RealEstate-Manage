@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from operator import is_
 from pynput import keyboard
 import win32clipboard
 from selenium.webdriver.support.ui import Select
@@ -43,12 +44,9 @@ def on_press(key):
         pass
 
 
-def check_background_image(xpath):
-    elem = driver.find_element(By.XPATH, xpath).value_of_css_property("background")
-    if "check_on" in elem:
-        return True
-    elif "check_off" in elem:
-        return False
+def check_ifchecked(xpath):
+    elem = driver.find_element(By.XPATH, xpath).get_property("checked")
+    return elem
 
 
 while True:
@@ -264,9 +262,12 @@ while True:
         if elv >= 1:
             elv_yes.click()
             print("엘리베이터 있음 입력(%d)" % elv)
+            is_elv = True
 
         elif elv < 1:
+            elv_no.click()
             print("엘리베이터 없음 입력(%d)" % elv)
+            is_elv = False
 
     except:
         print("엘리베이터 입력 \033[31m실패\033[37m")
@@ -294,16 +295,29 @@ while True:
 
     # 공용관리비
     try:
-        public_manage_list = ["청소비", "승강기유지비", "인터넷", "유선TV"]
+        public_manage_list = ["청소비", "인터넷", "유선TV"]
 
         for i in public_manage_list:
-            if check_background_image('//*[text() = "%s"]/../input' % i) == False:
+            if check_ifchecked('//*[text() = "%s"]/../input' % i) == False:
                 driver.find_element(By.XPATH, '//*[text() = "%s"]/../input' % i).click()
                 print("%s 체크" % i)
 
-        if check_background_image('(//p[text() = "기타"])[2]') == False:
-            driver.find_element(By.XPATH, '(//p[text() = "기타"])[2]').click()
+        if check_ifchecked('(//p[text() = "기타"])[2]/../input') == False:
+            driver.find_element(By.XPATH, '(//p[text() = "기타"])[2]/../input').click()
             print("기타 체크")
+
+        if (
+            check_ifchecked('//p[text() = "승강기유지비"]/../input') == False
+            and is_elv == True
+        ):
+            driver.find_element(By.XPATH, '//p[text() = "승강기유지비"]/../input').click()
+            print("승강기유지비 체크")
+        elif (
+            check_ifchecked('//p[text() = "승강기유지비"]/../input') == True
+            and is_elv == False
+        ):
+            driver.find_element(By.XPATH, '//p[text() = "승강기유지비"]/../input').click()
+            print("승강기유지비 체크 해제")
 
     except:
         print("공용관리비 체크 \033[31m실패\033[37m")
@@ -313,7 +327,7 @@ while True:
         private_manage_list = ["난방비", "전기료", "가스사용료"]
 
         for i in private_manage_list:
-            if check_background_image('//*[text() = "%s"]/../input' % i) == False:
+            if check_ifchecked('//*[text() = "%s"]/../input' % i) == False:
                 driver.find_element(By.XPATH, '//*[text() = "%s"]/../input' % i).click()
                 print("%s 체크" % i)
     except:
@@ -335,7 +349,7 @@ while True:
         ]
 
         for i in options:
-            if check_background_image('//*[text() = "%s"]/../input' % i) == False:
+            if check_ifchecked('//*[text() = "%s"]/../input' % i) == False:
                 driver.find_element(By.XPATH, '//*[text() = "%s"]/../input' % i).click()
                 print("%s 체크" % i)
 
