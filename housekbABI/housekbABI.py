@@ -68,12 +68,7 @@ while True:
         continue
 
     # areatext 불러오기
-    driver.find_element(By.ID, "area").send_keys(Keys.CONTROL + "A")
-    driver.find_element(By.ID, "area").send_keys(Keys.CONTROL + "C")
-    win32clipboard.OpenClipboard()
-    areatext = win32clipboard.GetClipboardData()
-    win32clipboard.EmptyClipboard()
-    win32clipboard.CloseClipboard()
+    areatext = driver.find_element(By.ID, "area").get_property("value")
 
     doRandomElementClick()
 
@@ -83,9 +78,18 @@ while True:
     kor_ho = re.findall("[0-9]?[0-9][0-9][0-9]호", areatext)[0]
     ho = re.sub("호", "", kor_ho)
     floor = ho[:-2]
+    ho_lasttwo = ho[-2:]
 
     # 동 추출
     dong = areatext_splited[0]
+
+    # 층정보의 현재층 있음 -> 호의 뒤에 두자리만 따서 결합
+    check_nowfloor = driver.find_element(By.NAME, "now_floor").get_property("value")
+    if check_nowfloor != "":
+        if ho != check_nowfloor + ho_lasttwo:
+            print("\033[01m%s호 -> %s호로 변경\033[0m" % (ho, check_nowfloor + ho_lasttwo))
+            ho = check_nowfloor + ho_lasttwo
+
     # 시군구 코드 추출
     sigunguCd = sigunguCdconvert(dong)
     # 법정동 코드 추출
@@ -297,20 +301,9 @@ while True:
     try:
         now_floor = driver.find_element(By.ID, "now_floor")
 
-        now_floor.send_keys(Keys.CONTROL + "A")
-        now_floor.send_keys(Keys.CONTROL + "C")
+        now_floor_value = now_floor.get_property("value")
 
-        doRandomElementClick()
-
-        win32clipboard.OpenClipboard()
-        try:
-            now_floor_value = win32clipboard.GetClipboardData()
-        except TypeError:
-            now_floor_value = None
-        win32clipboard.EmptyClipboard()
-        win32clipboard.CloseClipboard()
-
-        if now_floor_value == None:
+        if now_floor_value == "":
             now_floor.clear()
             now_floor.send_keys(floor)
             print("현재 층 입력(%s)" % floor)
@@ -318,5 +311,7 @@ while True:
             print("현재 층 입력되어있음")
     except:
         print("현재 층 입력 \033[31m실패\033[0m")
+
+    doRandomElementClick()
 
     print("완료\n\n\n\n")
