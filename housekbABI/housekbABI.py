@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
-from pynput import keyboard
-import win32clipboard
-from selenium.webdriver.support.ui import Select
+import os
 import re
+
 import PublicDataReader as pdr
+import win32clipboard
+from BuildingInfoParser import *
+from data import *
+from pynput import keyboard
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-import os
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
-
-from data import *
-from BuildingInfoParser import *
-
+from selenium.webdriver.support.ui import Select
+from webdriver_manager.chrome import ChromeDriverManager
 
 os.system("cls")
 print("Starting ...\n")
@@ -84,10 +82,12 @@ while True:
     dong = areatext_splited[0]
 
     # 층정보의 현재층 있음 -> 호의 뒤에 두자리만 따서 결합
-    check_nowfloor = driver.find_element(By.NAME, "now_floor").get_property("value")
+    check_nowfloor = driver.find_element(
+        By.NAME, "now_floor").get_property("value")
     if check_nowfloor != "":
         if ho != check_nowfloor + ho_lasttwo:
-            print("\033[01m%s호 -> %s호로 변경\033[0m" % (ho, check_nowfloor + ho_lasttwo))
+            print("\033[01m%s호 -> %s호로 변경\033[0m" %
+                  (ho, check_nowfloor + ho_lasttwo))
             ho = check_nowfloor + ho_lasttwo
 
     # 시군구 코드 추출
@@ -135,9 +135,11 @@ while True:
     # 사용승인일 구하고 쓰기
     try:
         useaprday = 사용승인일(session.표제부세션)
-        useaprday_dotted = useaprday[0:4] + "." + useaprday[4:6] + "." + useaprday[6:8]
+        useaprday_dotted = useaprday[0:4] + "." + \
+            useaprday[4:6] + "." + useaprday[6:8]
         driver.find_element(By.ID, "build_access_date").clear()
-        driver.find_element(By.ID, "build_access_date").send_keys(useaprday_dotted)
+        driver.find_element(By.ID, "build_access_date").send_keys(
+            useaprday_dotted)
         print("사용승인일 입력(%s)" % useaprday_dotted)
     except:
         print("사용승인일 입력 \033[31m실패\033[0m")

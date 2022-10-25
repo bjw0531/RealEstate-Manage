@@ -1,8 +1,9 @@
-from tkinter import *
-import re
-import PublicDataReader as pdr
-import pandas as pd
 import decimal
+import re
+from tkinter import *
+
+import pandas as pd
+import PublicDataReader as pdr
 
 serviceKey = "boUDsxTChVh4mecHhfF0r1%2B3w%2FIOzO4tnvgdHmhLWsUsaX2bx%2FKspfmPnJrP1%2B6z2cBqTewiS30Lf3ohEghk9g%3D%3D"
 bd = pdr.Building(serviceKey, debug=True)
@@ -15,7 +16,8 @@ class newsession:
         표제부 세션을 만듭니다.\n
         세션.표제부세션 으로 접근할 수 있습니다.
         """
-        df = bd.read_data(category="표제부", sigunguCd=시군구코드, bjdongCd=법정동코드, bun=번, ji=지)
+        df = bd.read_data(category="표제부", sigunguCd=시군구코드,
+                          bjdongCd=법정동코드, bun=번, ji=지)
         newsession.표제부세션 = df.head(10000)
 
     @staticmethod
@@ -35,7 +37,8 @@ class newsession:
         층별개요 세션을 만듭니다.\n
         세션.층별개요세션 으로 접근할 수 있습니다.
         """
-        df = bd.read_data(category="층별개요", sigunguCd=시군구코드, bjdongCd=법정동코드, bun=번, ji=지)
+        df = bd.read_data(category="층별개요", sigunguCd=시군구코드,
+                          bjdongCd=법정동코드, bun=번, ji=지)
         newsession.층별개요세션 = df.head(10000)
 
 

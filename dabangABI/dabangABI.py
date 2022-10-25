@@ -1,22 +1,16 @@
 # -*- coding: utf-8 -*-
-from operator import is_
-from pynput import keyboard
-import win32clipboard
-from selenium.webdriver.support.ui import Select
-import re
+import os
+
 import PublicDataReader as pdr
+from BuildingInfoParser import *
+from data import *
+from pynput import keyboard
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
-import os
-from selenium.webdriver.common.keys import Keys
-
-
-from data import *
-from BuildingInfoParser import *
-
 
 os.system("cls")
 print("Starting ...\n")
@@ -135,7 +129,8 @@ while True:
 
     # 용도에 맞게 드롭다운 메뉴 선택
     try:
-        purpose_selectbox = Select(driver.find_element(By.NAME, "principalUseType"))
+        purpose_selectbox = Select(
+            driver.find_element(By.NAME, "principalUseType"))
 
         if purpose == "단독주택":
             purpose_selectbox.select_by_index(1)
@@ -234,7 +229,8 @@ while True:
 
     # 욕실 수
     try:
-        bathroom_selectbox = Select(driver.find_element(by=By.NAME, value="bathNum"))
+        bathroom_selectbox = Select(
+            driver.find_element(by=By.NAME, value="bathNum"))
         bathroom_selectbox.select_by_index(1)
         print("욕실 수 1개 입력")
     except:
@@ -299,24 +295,28 @@ while True:
 
         for i in public_manage_list:
             if check_ifchecked('//*[text() = "%s"]/../input' % i) == False:
-                driver.find_element(By.XPATH, '//*[text() = "%s"]/../input' % i).click()
+                driver.find_element(
+                    By.XPATH, '//*[text() = "%s"]/../input' % i).click()
                 print("%s 체크" % i)
 
         if check_ifchecked('(//p[text() = "기타"])[2]/../input') == False:
-            driver.find_element(By.XPATH, '(//p[text() = "기타"])[2]/../input').click()
+            driver.find_element(
+                By.XPATH, '(//p[text() = "기타"])[2]/../input').click()
             print("기타 체크")
 
         if (
             check_ifchecked('//p[text() = "승강기유지비"]/../input') == False
             and is_elv == True
         ):
-            driver.find_element(By.XPATH, '//p[text() = "승강기유지비"]/../input').click()
+            driver.find_element(
+                By.XPATH, '//p[text() = "승강기유지비"]/../input').click()
             print("승강기유지비 체크")
         elif (
             check_ifchecked('//p[text() = "승강기유지비"]/../input') == True
             and is_elv == False
         ):
-            driver.find_element(By.XPATH, '//p[text() = "승강기유지비"]/../input').click()
+            driver.find_element(
+                By.XPATH, '//p[text() = "승강기유지비"]/../input').click()
             print("승강기유지비 체크 해제")
 
     except:
@@ -328,7 +328,8 @@ while True:
 
         for i in private_manage_list:
             if check_ifchecked('//*[text() = "%s"]/../input' % i) == False:
-                driver.find_element(By.XPATH, '//*[text() = "%s"]/../input' % i).click()
+                driver.find_element(
+                    By.XPATH, '//*[text() = "%s"]/../input' % i).click()
                 print("%s 체크" % i)
     except:
         print("개별사용료 체크 \033[31m실패\033[37m")
@@ -350,7 +351,8 @@ while True:
 
         for i in options:
             if check_ifchecked('//*[text() = "%s"]/../input' % i) == False:
-                driver.find_element(By.XPATH, '//*[text() = "%s"]/../input' % i).click()
+                driver.find_element(
+                    By.XPATH, '//*[text() = "%s"]/../input' % i).click()
                 print("%s 체크" % i)
 
     except:

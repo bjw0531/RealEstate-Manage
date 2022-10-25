@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-from pynput import keyboard
-from selenium.webdriver.support.ui import Select
-import PublicDataReader as pdr
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 import os
-from selenium.common.exceptions import NoSuchElementException
 
-from data import *
+import PublicDataReader as pdr
 from BuildingInfoParser import *
-
+from data import *
+from pynput import keyboard
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+from webdriver_manager.chrome import ChromeDriverManager
 
 os.system("cls")
 print("Starting ...\n")
@@ -98,7 +97,8 @@ while True:
 
     # 빌라인지 체크
     is_villa = (
-        driver.find_element(By.XPATH, "//*[@class='active']").get_property("innerText")
+        driver.find_element(
+            By.XPATH, "//*[@class='active']").get_property("innerText")
         == "빌라"
     )
 
@@ -161,7 +161,8 @@ while True:
         total_floor = 총층수(session.표제부세션)
 
         # 총 층 선택
-        total_floor_selectbox = Select(driver.find_element(By.NAME, "building_floor"))
+        total_floor_selectbox = Select(
+            driver.find_element(By.NAME, "building_floor"))
         total_floor_selectbox.select_by_index(int(total_floor))
 
         # 현재 층 선택
@@ -200,7 +201,8 @@ while True:
 
     # 화장실 수 (1개)
     try:
-        bathroom_selectbox = Select(driver.find_element(By.NAME, "bathroom_count"))
+        bathroom_selectbox = Select(
+            driver.find_element(By.NAME, "bathroom_count"))
         bathroom_selectbox.select_by_index(1)
         print("화장실 수 1개 입력")
     except:
@@ -212,7 +214,8 @@ while True:
 
         useaprday = 사용승인일(session.표제부세션)
 
-        useaprday_splited = useaprday[0:4] + "." + useaprday[4:6] + "." + useaprday[6:8]
+        useaprday_splited = useaprday[0:4] + "." + \
+            useaprday[4:6] + "." + useaprday[6:8]
 
         useaprday_textbox.clear()
         useaprday_textbox.send_keys(useaprday_splited)
@@ -262,7 +265,8 @@ while True:
 
         for i in public_manage_list:
             if not public_manage_dict[i] in public_manage_value:
-                driver.find_element(By.XPATH, '//span[text() = "%s"]' % i).click()
+                driver.find_element(
+                    By.XPATH, '//span[text() = "%s"]' % i).click()
                 print("%s 체크" % i)
 
     except:
@@ -287,7 +291,8 @@ while True:
 
             for i in options_list:
                 if not options_dict[i] in options_value:
-                    driver.find_element(By.XPATH, '//span[text() = "%s"]' % i).click()
+                    driver.find_element(
+                        By.XPATH, '//span[text() = "%s"]' % i).click()
                     print("%s 체크" % i)
 
     except:
