@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import math
 import os
+import sys
 
 import PublicDataReader as pdr
 from BuildingInfoParser import *
@@ -25,7 +27,7 @@ driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()), options=options
 )
 serviceKey = """boUDsxTChVh4mecHhfF0r1%2B3w%2FIOzO4tnvgdHmhLWsUsaX2bx%2FKspfmPnJrP1%2B6z2cBqTewiS30Lf3ohEghk9g%3D%3D"""
-bd = pdr.Building(serviceKey, debug=True)
+bd = pdr.Building(serviceKey, debug=False)
 os.system("cls")
 
 
@@ -224,7 +226,7 @@ while True:
     except:
         print("사용승인일 입력 \033[31m실패\033[0m")
 
-    # 주차
+    # 주차 여부
     try:
         parking = 주차대수(session.표제부세션)
 
@@ -237,6 +239,26 @@ while True:
             print("주차 불가능 입력")
     except:
         print("주차 가능여부 입력 \033[31m실패\033[37m")
+
+    # 주차 가능 대수
+    try:
+        if parking >= 1:
+            household_cnt = 세대수(session.표제부세션)
+
+            if not household_cnt:
+                parking_perhouse = 0.5
+            else:
+                parking_perhouse = math.floor(
+                    parking / household_cnt * 10) / 10
+            driver.find_element(By.NAME, 'parking_count').clear()
+            driver.find_element(By.NAME, 'parking_count').send_keys(
+                parking_perhouse)
+            print(f"세대당 주차 대수 입력({parking_perhouse}대)")
+
+        else:
+            raise
+    except:
+        print("세대당 주차 대수 입력 \033[31m실패\033[37m")
 
     # 엘리베이터
     try:

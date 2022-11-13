@@ -6,7 +6,7 @@ import pandas as pd
 import PublicDataReader as pdr
 
 serviceKey = "boUDsxTChVh4mecHhfF0r1%2B3w%2FIOzO4tnvgdHmhLWsUsaX2bx%2FKspfmPnJrP1%2B6z2cBqTewiS30Lf3ohEghk9g%3D%3D"
-bd = pdr.Building(serviceKey, debug=True)
+bd = pdr.Building(serviceKey, debug=False)
 
 
 class newsession:
@@ -168,6 +168,20 @@ def 주차대수(표제부세션):
     else:
         return False
 
+def 세대수(표제부세션):
+    """
+    가구수, 세대수, 호수를 차례대로 구하여 0이 아닌 것을 출력합니다.\n
+    실패시 False를 출력합니다.
+    """
+    df = 표제부세션
+    if len(df.index) == 1:
+        lst = ["가구수", "세대수", "호수"]
+        for i in lst:
+            result = int(df.iloc[0][i])
+            if result:
+                return result
+        return False
+
 
 def 총층수(표제부세션):
     """
@@ -185,12 +199,10 @@ def 총층수(표제부세션):
 if __name__ == "__main__":
 
     session = newsession()
-    session.표제부("44133", "10500", "0770", "0000")
+    session.표제부("44133", "10400", "1420", "0000")
     session.전유공용면적("44133", "10400", "1420", "0000")
-    df1 = pd.read_csv("C:/Users/User/Downloads/통합 문서1.csv")
-    print(df1)
+
+    a = session.표제부세션
     b = session.전유공용면적세션
-    c = session.표제부세션
-    print(b)
-    d = 공급면적(session.전유공용면적세션, 202)
-    print(d)
+
+    print(세대수(a))
