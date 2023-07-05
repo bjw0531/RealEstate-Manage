@@ -27,7 +27,8 @@ driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()), options=options
 )
 serviceKey = """boUDsxTChVh4mecHhfF0r1%2B3w%2FIOzO4tnvgdHmhLWsUsaX2bx%2FKspfmPnJrP1%2B6z2cBqTewiS30Lf3ohEghk9g%3D%3D"""
-bd = pdr.Building(serviceKey, debug=False)
+
+bd = pdr.BuildingLedger(serviceKey)
 os.system("cls")
 
 
